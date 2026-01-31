@@ -1,25 +1,61 @@
 <IfModule mod_rewrite.c>
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # --------------------------------------------------
+    # Handle Authorization Header (Laravel requirement)
+    # --------------------------------------------------
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
+    # --------------------------------------------------
+    # Handle XSRF Token
+    # --------------------------------------------------
     RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:x-xsrf-token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # --------------------------------------------------
+    # Remove trailing slashes (SEO + consistency)
+    # --------------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # --------------------------------------------------
+    # Send all non-file requests to Laravel
+    # --------------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+</IfModule>
+
+# ==================================================
+# PERFORMANCE: BROWSER CACHING (VERY IMPORTANT)
+# ==================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType application/x-javascript "access plus 1 year"
+
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
+
+# ==================================================
+# PERFORMANCE: CACHE HEADERS
+# ==================================================
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|jpg|jpeg|png|webp|svg)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
 </IfModule>
