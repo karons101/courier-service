@@ -4,6 +4,7 @@
 <div class="max-w-2xl w-full bg-white p-6 rounded-lg shadow-md">
     <h1 class="text-2xl font-bold mb-6 text-center">Create Shipment</h1>
 
+    <!-- Correct route usage -->
     <form action="{{ route('shipment.store') }}" method="POST" class="space-y-4">
         @csrf
 

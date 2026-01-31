@@ -7,13 +7,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/*
+|--------------------------------------------------------------------------
+| SHIPMENT CREATE
+|--------------------------------------------------------------------------
+*/
 Route::get('/shipment/create', [ShipmentController::class, 'create'])
     ->name('shipment.create');
 
-Route::post('/shipment/store', [ShipmentController::class, 'store'])
+Route::post('/shipment/create', [ShipmentController::class, 'store'])
     ->name('shipment.store');
 
-/* TRACKING */
+/*
+|--------------------------------------------------------------------------
+| SHIPMENT TRACKING
+|--------------------------------------------------------------------------
+*/
 Route::get('/shipment/track', [ShipmentController::class, 'track'])
     ->name('shipment.track-form');
 

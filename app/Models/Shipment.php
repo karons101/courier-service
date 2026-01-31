@@ -9,12 +9,14 @@ class Shipment extends Model
 {
     use HasFactory;
 
-    // Fields allowed for mass assignment
     protected $fillable = [
         'sender_name',
-        'receiver_name',
-        'receiver_address',
+        'sender_address',
+        'recipient_name',
+        'recipient_address',
+        'weight',
+        'description',
+        'tracking_id',
         'status',
-        'tracking_id'
     ];
-} 
+}

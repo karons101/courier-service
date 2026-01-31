@@ -12,13 +12,13 @@
     <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
 
-    <!-- Vite (ONLY load once) -->
+    <!-- Vite assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="antialiased font-sans text-gray-900 overflow-x-hidden m-0 p-0">
 
-<!-- HERO / CAROUSEL (OPTIMIZED) -->
+<!-- HERO / CAROUSEL -->
 <div
     x-data="{
         slides: [
@@ -39,13 +39,13 @@
     class="relative min-h-screen w-full overflow-hidden"
 >
 
-    <!-- SINGLE BACKGROUND (FAST LOAD) -->
+    <!-- BACKGROUND -->
     <div
         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
         :style="`background-image: url(${slides[active]})`"
     ></div>
 
-    <!-- DARK OVERLAY -->
+    <!-- OVERLAY -->
     <div class="absolute inset-0 bg-black/60"></div>
 
     <!-- CONTENT -->
