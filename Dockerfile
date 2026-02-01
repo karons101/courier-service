@@ -5,13 +5,14 @@ FROM php:8.3-fpm
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    libpq-dev \
     libzip-dev \
     zip \
     curl \
+    sqlite3 \
+    libsqlite3-dev \
     nodejs \
     npm \
-    && docker-php-ext-install pdo pdo_pgsql zip \
+    && docker-php-ext-install pdo pdo_sqlite zip \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------- Composer ----------
@@ -26,14 +27,15 @@ COPY . .
 # ---------- Install PHP Dependencies ----------
 RUN composer install --no-dev --optimize-autoloader
 
-# ---------- Install Frontend Dependencies ----------
-RUN npm install && npm run build
+# ---------- Ensure SQLite Database Exists ----------
+RUN touch database/database.sqlite \
+    && chown -R www-data:www-data database storage bootstrap/cache
 
-# ---------- Permissions ----------
-RUN chown -R www-data:www-data storage bootstrap/cache
+# ---------- Install Frontend Dependencies & Build ----------
+RUN npm install && npm run build
 
 # ---------- Expose Port ----------
 EXPOSE 8000
 
 # ---------- Start Laravel ----------
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
