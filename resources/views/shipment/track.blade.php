@@ -20,11 +20,21 @@
     </form>
 
     @if($shipment)
-        <div class="border p-4 rounded bg-white shadow">
+        <div class="border p-4 rounded bg-white shadow space-y-2">
             <p><strong>Tracking ID:</strong> {{ $shipment->tracking_id }}</p>
-            <p><strong>Sender:</strong> {{ $shipment->sender_name }}</p>
-            <p><strong>Receiver:</strong> {{ $shipment->receiver_name }}</p>
-            <p><strong>Address:</strong> {{ $shipment->receiver_address }}</p>
+
+            <p><strong>Sender Name:</strong> {{ $shipment->sender_name }}</p>
+            <p><strong>Sender Address:</strong> {{ $shipment->sender_address }}</p>
+
+            <p><strong>Recipient Name:</strong> {{ $shipment->recipient_name }}</p>
+            <p><strong>Recipient Address:</strong> {{ $shipment->recipient_address }}</p>
+
+            <p><strong>Package Weight:</strong> {{ $shipment->weight }} kg</p>
+
+            @if($shipment->description)
+                <p><strong>Package Description:</strong> {{ $shipment->description }}</p>
+            @endif
+
             <p><strong>Status:</strong> {{ $shipment->status }}</p>
         </div>
     @endif
