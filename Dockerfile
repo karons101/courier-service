@@ -18,24 +18,27 @@ RUN apt-get update && apt-get install -y \
 # ---------- Composer ----------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# ---------- App Directory ----------
+# ---------- Set Working Directory ----------
 WORKDIR /app
 
-# ---------- Copy Project ----------
+# ---------- Copy Project Files ----------
 COPY . .
 
 # ---------- Install PHP Dependencies ----------
 RUN composer install --no-dev --optimize-autoloader
 
-# ---------- Ensure SQLite Database Exists ----------
-RUN touch database/database.sqlite \
-    && chown -R www-data:www-data database storage bootstrap/cache
+# ---------- Ensure SQLite Database Exists and Permissions ----------
+RUN mkdir -p database storage bootstrap/cache \
+    && touch database/database.sqlite \
+    && chown -R www-data:www-data database storage bootstrap/cache \
+    && chmod -R 775 database storage bootstrap/cache
 
 # ---------- Install Frontend Dependencies & Build ----------
-RUN npm install && npm run build
+RUN npm install
+RUN npm run build
 
 # ---------- Expose Port ----------
 EXPOSE 8000
 
 # ---------- Start Laravel ----------
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
